@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse,HttpResponseNotFound , HttpResponseRedirect
-
+from django.urls import reverse
 #Dict containing all the months
 months_dict={
     "January":"This is a January Month",
@@ -21,14 +21,15 @@ def int_month(request,month):
     print(months)
     redirect_month=months[month-1]
     print(redirect_month)
-    return HttpResponseRedirect(redirect_month)
+    redirect_path=reverse("string-month",args=[redirect_month])
+    return HttpResponseRedirect(redirect_path)
     
 
 def str_month(request,month):
     #for text other then months present in the months dict
-    
-    text=months_dict[month]
-    return HttpResponse(text)
-    
-    return HttpResponseNotFound("This is not a Month")
+    try:
+        text=months_dict[month]
+        return HttpResponse(text)
+    except:
+        return HttpResponseNotFound("This is not a Month")
 
